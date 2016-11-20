@@ -12,10 +12,9 @@
 
         <link rel="stylesheet" href="css/normalize.css">
         <link rel="stylesheet" href="css/main.css">
-        <!--script src="3rd/modernizr/bin/modernizr"></script-->
         <script src="3rd/jquery/dist/jquery.min.js"></script>
-        <script src="3rd/d3/d3.min.js"></script>
         <script src="3rd/victor/build/victor.min.js"></script>
+        <script src="3rd/file-saver/FileSaver.min.js"></script>
     </head>
     <body>
         <!--[if lt IE 8]>
@@ -23,13 +22,24 @@
         <![endif]-->
 
         <!-- Add your site or application content here -->
-        <svg style="background-color: #888;">
-						<g id="pheromons"></g>
-						<g id="background"></g>
-						<g id="entities"></g>
-						<g id="helpers"></g>
-				</svg>
-				<span id="counter"></span>
+				<table>
+					<tr>
+						<td>
+							<svg style="background-color: #888;">
+									<g id="pheromons"></g>
+									<g id="background"></g>
+									<g id="entities"></g>
+									<g id="helpers"></g>
+							</svg>
+						</td>
+						<td id="infos">
+							<div>
+								<input type="checkbox" id="draw" checked="checked" /> Draw
+							</div>
+							<div>Turns:<span id="counter"></span></div>
+						</td>
+					</tr>
+				</table>
         <script src="dist/app.js"></script>
     </body>
 </html>

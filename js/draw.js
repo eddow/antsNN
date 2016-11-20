@@ -8,7 +8,7 @@ function resize() {
 		width: sz,
 		height: sz
 	});
-	for(d of draw.drawn)
+	for(let d of draw.drawn)
 		d.redraw();
 }
 function fireMouse(evt) {
@@ -33,6 +33,7 @@ function completeColors(svgItem, colorSpec) {
 }
 var redraw = {
 	circle: function() {
+		if(!draw.draw) return;
 		var p = this.parent;
 		this.parts.main.attr(completeColors({
 			cx: Math.round(p.x*multiplicator),
@@ -41,6 +42,7 @@ var redraw = {
 		}, p));
 	},
 	path: function() {
+		if(!draw.draw) return;
 		var p = this.parent;
 		this.parts.main.attr(completeColors({
 			d: pathTexts(p.points)
@@ -57,8 +59,17 @@ function pathTexts(points) {
 		rv += ' L ' + coord(i);
 	return rv + ' Z';
 }
+var drawCheck = $('#draw');
+drawCheck.click(function() {
+	if(drawCheck[0].checked)
+		for(let d of draw.drawn)
+			d.redraw();
+});
 export var draw = {
 	svg,
+	get draw() {
+		return drawCheck[0].checked;
+	},
 	drawn: new Set(),
 	addSvg(node, type, spec) {
 		var x = $(document.createElementNS("http://www.w3.org/2000/svg", node)), dst = svg;

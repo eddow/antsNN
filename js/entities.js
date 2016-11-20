@@ -17,6 +17,47 @@ export class vector extends Victor {
 		if(origin) v.add(origin);
 		return v;
 	}
+	multiplyX(x) {
+		if('number'!== typeof x)
+			return super.multiplyX(x);
+		this.x *= x;
+		return this;
+	}
+	multiplyY(x) {
+		if('number'!== typeof x)
+			return super.multiplyY(x);
+		this.y *= x;
+		return this;
+	}
+	multiply(x) {
+		if('number'!== typeof x)
+			return super.multiply(x);
+		this.x *= x;
+		this.y *= x;
+		return this;
+	}
+	divideX(x) {
+		if('number'!== typeof x)
+			return super.divideX(x);
+		this.x /= x;
+		return this;
+	}
+	divideY(x) {
+		if('number'!== typeof x)
+			return super.divideY(x);
+		this.y /= x;
+		return this;
+	}
+	divide(x) {
+		if('number'!== typeof x)
+			return super.divide(x);
+		this.x /= x;
+		this.y /= x;
+		return this;
+	}
+	clone() {
+		return new vector(this);
+	}
 }
 
 export class entity extends vector {
@@ -54,7 +95,7 @@ export class stain extends entity {
 		return {
 			direction: intensity.position.norm()
 				.invert()
-				.multiply(new vector(strength, strength)),
+				.multiply(strength),
 			proximity: intensity.proximity,
 			strength: intensity.strength
 		};

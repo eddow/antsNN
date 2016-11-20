@@ -61,3 +61,17 @@ export var intelligence = {
 		};
 	}
 }
+
+export function initIntelligence() {
+	return {
+		pheromons: {
+			food: new objects('pheromons', 150),
+			danger: new objects('pheromons', 25),
+			nest: new objects('pheromons', 275)
+		}
+	}
+}
+
+export function endGame(score) {
+	console.log(score);
+}

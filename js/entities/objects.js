@@ -33,6 +33,10 @@ export class objects {
 		board.mouseListeners.add(function(coord) { me.drawVect(coord); });
 		this.indic = new drawnVector(this);
 	}
+	clear() {
+		for(let stain of this.stains)
+			stain.remove();
+	}
 	drawVect(coord) {
 		if(!coord) this.indic.move();
 		else {

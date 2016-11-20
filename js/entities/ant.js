@@ -46,6 +46,7 @@ export class ant extends entity {
 			if(p)
 				this.strength -= p.strength/lifeQty;
 		}
+		this.strength -= Math.random()/500;
 		if(0>= this.strength) this.remove();
 	}
 	eat(qtt) {
@@ -54,7 +55,6 @@ export class ant extends entity {
 	remove() {
 		super.remove();
 		this.nest.ants.delete(this);
-		console.log('-ants-> '+this.nest.ants.size);
 	}
 	redraw() {
 		this.points = [
@@ -101,7 +101,6 @@ export class nest extends stain {
 		var i;
 		for(i=0; i<(number||1); ++i)
 			this.ants.add(new ant(vector.around(this.radius, this), this));
-		console.log('+ants-> '+this.ants.size);
 	}
 	eat(qtt) {
 		var r = Math.floor(this.resource += qtt);
@@ -109,5 +108,13 @@ export class nest extends stain {
 			this.spawn(r);
 			this.resource -= r;
 		}
+	}
+	clear() {
+		for(let ant of this.ants) ant.remove();
+		Object.assign(this, {
+			strength: 1,
+			ants: new Set(),
+			resource: 0
+		});
 	}
 }
