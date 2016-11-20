@@ -1,7 +1,7 @@
 import {vector} from "./entities.js";
 import {objects} from "./entities/objects.js";
 
-var nests = [], nbrNests = 100, generation = 0;
+var nests = [], nbrNests = 100, generation = 0, clearGame;
 
 function R2one(n) {
 	return 2*Math.atan(n)/Math.PI;
@@ -77,7 +77,7 @@ export var intelligence = {
 			this.mutationDefaultOne();
 		while(.1> Math.random())
 			this.mutationDeleteOne();
-		while(.2> Math.random())
+		while(.1> Math.random())
 			this.mutationAddOne();
 	},
 	layers(ant, interractions) {
@@ -174,7 +174,8 @@ var io = intelligence.layers({}, {pheromons:{}}),
 	inputNames = Object.keys(io.input);
 
 
-export function initIntelligence() {
+export function initIntelligence(clear) {
+	clearGame = clear;
 	return {
 		pheromons: {
 			p0: new objects('pheromons', 250),
@@ -210,6 +211,7 @@ export function endGame(score) {
 	$('#scoreAverage').text(average / nests.length);
 	$('#population').text(nests.length);
 	$('#generation').text(++generation);
+	clearGame();
 }
 
 $("#infos").append(`
@@ -220,6 +222,7 @@ $("#infos").append(`
 	<div>Min:<span id="scoreMin"></span></div>
 	<div>
 		<button id="saveCmd">Save</button>
+		<input type="file" accept="json" id="loadFile" />
 		<button id="loadCmd">Load</button>
 	</div>
 	<div>
@@ -228,6 +231,21 @@ $("#infos").append(`
 `);
 
 $('#saveCmd').click(function() {
-	var blob = new Blob([JSON.stringify(nests)], {type: "application/json;charset=utf-8"});
+	var blob = new Blob([JSON.stringify({nests, generation})], {type: "application/json;charset=utf-8"});
 	saveAs(blob, "nests.json");
+});
+
+var fr;
+function receivedText() {
+	var vals = JSON.parse(fr.result);
+	nests = vals.nests;
+	generation = vals.generation-1;
+	endGame();
+}
+$('#loadCmd').click(function() {
+	var input = $('#loadFile')[0];
+	fr = new FileReader();
+	fr.onload = receivedText;
+	fr.readAsText(input.files[0]);
+	//fr.readAsDataURL(input.files[0]);
 });
