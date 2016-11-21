@@ -1,7 +1,7 @@
 import {vector} from "./entities.js";
 import {objects} from "./entities/objects.js";
 
-var nests = [], nbrNests = 100, generation = 0, clearGame;
+var nests = [], nbrNests = 100, generation = 0, clearGame, sonOf = false;
 
 function R2one(n) {
 	return 2*Math.atan(n)/Math.PI;
@@ -199,8 +199,15 @@ export function initIntelligence(clear) {
 }
 
 export function endGame(score) {
-	if(undefined!== score)
-		nests.push(Object.assign(intelligence.raw, {score}));
+	var rawFather;
+	if(undefined!== score) {
+		if(false!== sonOf) {
+			rawFather = nests[sonOf];
+			nests[sonOf] = Object.assign(intelligence.raw, {score});
+		} else {
+			nests.push(Object.assign(intelligence.raw, {score}));
+		}
+	}
 	nests.sort(function(a, b) { return b.score-a.score; })
 	if(nbrNests < nests.length) {
 		nests.pop();	//removes the "loser"
@@ -209,8 +216,12 @@ export function endGame(score) {
 			index = 0;
 		else
 			index *= index * nests.length;	//[0..1[ square to chose more probably best ones
-		intelligence.raw = nests[Math.floor(index)];
+		intelligence.raw = nests[sonOf = Math.floor(index)];
 		intelligence.mutate();
+	} else if(false!== sonOf) {
+		intelligence.raw = rawFather;
+		intelligence.mutate();
+		sonOf = false;
 	} else {
 		intelligence.random();
 	}
