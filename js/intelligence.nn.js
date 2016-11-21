@@ -205,6 +205,7 @@ export function initIntelligence(clear) {
 
 export function endGame(score) {
 	var minS, maxS;
+	if(score < -10) score = undefined;
 	if(undefined!== score)
 		nests.push(Object.assign(intelligence.raw, {score}));
 	nests.sort(function(a, b) { return b.score-a.score; })

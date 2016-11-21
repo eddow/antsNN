@@ -15,7 +15,7 @@ intelligence.random();
 
 function clearGame() {
 	lava.clear();
-	lava.spawn(5, {
+	lava.spawn(1, {
 		number: [20, 50],
 		size: [5, 15],
 		radius: [1, 3],
