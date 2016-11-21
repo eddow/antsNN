@@ -44,7 +44,7 @@ export var intelligence = {
 	mutationAddOne() {
 		var itm = randomItem(Object.keys(this.neurons)),
 			combo = randomInputCombo(inputNames);
-		this.neurons[itm][combo] = one2R(2*Math.random()-1);
+		this.neurons[itm][combo] = Math.random()-0.5;
 	},
 	mutationDefaultOne() {
 		this.defaults[randomItem(Object.keys(this.defaults))] += Math.random()-.5;
