@@ -220,7 +220,7 @@ export function endGame(score) {
 			index *= index * nests.length;	//[0..1[ square to chose more probably best ones
 		index = Math.floor(index);
 		intelligence.raw = nests[index];
-		nests[index].score -= /*(maxS-minS)*/5;	//kill the father, 5 offsprings for the best
+		nests[index].score -= /*(maxS-minS)*/1;	//kill the father, 5 offsprings for the best
 		intelligence.mutate();
 	} else {
 		intelligence.random();
