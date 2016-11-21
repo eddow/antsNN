@@ -1,7 +1,8 @@
 import {vector} from "./entities.js";
 import {objects} from "./entities/objects.js";
 
-var nests = [], nbrNests = 100, generation = 0, clearGame;
+var nests = [], generation = 0, clearGame;
+const targetNbrLinks = {min: 10, max: 50}, nbrNests = 100;
 
 function R2one(n) {
 	return 2*Math.atan(n)/Math.PI;
@@ -79,14 +80,13 @@ export var intelligence = {
 	},
 	mutate() {
 		var nCnt = this.neuronCount();
-		const targetNbrLinks = {min: 100, max: 200};
 		while(.5> Math.random())
 			this.mutationDefaultOne();
-		while((nCnt.total/targetNbrLinks.max)> Math.random())
+		while(nCnt.total/targetNbrLinks.max> Math.random())
 			this.mutationDeleteOne(nCnt);
-		while(nCnt.total && .8> Math.random())
+		while(nCnt.total && 1-(targetNbrLinks.min/nCnt.total)> Math.random())
 			this.mutationChangeOne(nCnt);
-		while((1-(nCnt.total/targetNbrLinks.min)*.9)> Math.random()) {
+		while(targetNbrLinks.min/nCnt.total> Math.random()) {
 			this.mutationAddOne();
 			++nCnt.total;
 		}
