@@ -2,7 +2,7 @@ import {vector} from "./entities.js";
 import {objects} from "./entities/objects.js";
 
 var nests = [], generation = 0, clearGame;
-const targetNbrLinks = {min: 10, max: 50}, nbrNests = 100;
+const targetNbrLinks = {min: 10, max: 50}, nbrNests = 1;
 
 function R2one(n) {
 	return 2*Math.atan(n)/Math.PI;
@@ -204,12 +204,9 @@ export function initIntelligence(clear) {
 }
 
 export function endGame(score) {
-	var minS, maxS;
 	if(undefined!== score)
 		nests.push(Object.assign(intelligence.raw, {score}));
-	nests.sort(function(a, b) { return b.score-a.score; })
-	$('#scoreMin').text(minS = nests[nests.length-1].score);
-	$('#scoreMax').text(maxS = nests[0].score);
+	nests.sort(function(a, b) { return b.score-a.score; });
 	if(nbrNests < nests.length || (nbrNests == nests.length && undefined=== score)) {
 		if(undefined!== score)
 			nests.pop();	//removes the "loser"
@@ -229,6 +226,8 @@ export function endGame(score) {
 	for(let i in nests)
 		average += nests[i].score;
 	$('#scoreAverage').text(average / nests.length);
+	$('#scoreMin').text(nests[nests.length-1].score);
+	$('#scoreMax').text(nests[0].score);
 	$('#population').text(nests.length);
 	$('#generation').text(++generation);
 	clearGame();
