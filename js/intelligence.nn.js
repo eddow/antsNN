@@ -206,7 +206,7 @@ export function initIntelligence(clear) {
 export function endGame(score) {
 	if(score < -10) score = undefined;
 	if(undefined!== score)
-		nests.push(Object.assign(intelligence.raw, {score}));
+		nests.push(jquery.extend(true, intelligence.raw, {score}));
 	nests.sort(function(a, b) { return b.score-a.score; });
 	if(nbrNests < nests.length || (nbrNests == nests.length && undefined=== score)) {
 		if(undefined!== score)
