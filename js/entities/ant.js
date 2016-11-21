@@ -103,7 +103,7 @@ export class nest extends stain {
 			this.ants.add(new ant(vector.around(this.radius, this), this));
 	}
 	eat(qtt) {
-		var r = Math.floor(this.resource += qtt);
+		var r = Math.floor(this.resource += 2*qtt);
 		if(r) {
 			this.spawn(r);
 			this.resource -= r;

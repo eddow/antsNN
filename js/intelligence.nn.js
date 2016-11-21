@@ -102,19 +102,21 @@ export var intelligence = {
 		function defaults(type) {
 			if(undefined=== me.defaults[type])
 				me.defaults[type] = 0;
-			return me.defaults[type];
+			return R2one(me.defaults[type]);
 		}
 		function inputLoaded(type) {
 			input['loaded.'+type] = (ant.loaded && ant.loaded[type]) || defaults('loaded.'+type);
 		}
 		function inputObjects(type) {
-			input['object.'+type+'.qtt'] = (interractions[type] && interractions[type].qtt) || defaults('object.'+type+'.qtt');
-			input['object.'+type+'.proximity'] = (interractions[type] && interractions[type].proximity) || defaults('object.'+type+'.proximity');
+			input['object.'+type+'.qtt'] = R2one(interractions[type] && interractions[type].qtt) || defaults('object.'+type+'.qtt');
+			input['object.'+type+'.distance'] = (interractions[type] && interractions[type].proximity) || defaults('object.'+type+'.distance');
+			input['object.'+type+'.proximity'] = (interractions[type] && (1-interractions[type].proximity)) || defaults('object.'+type+'.proximity');
 			output['object.'+type+'.direction'] = base('object.'+type);
 		}
 		function inputPheromon(type) {
-			input['pheromon.'+type+'.qtt'] = (interractions.pheromons[type] && interractions.pheromons[type].qtt) || defaults('pheromon.'+type+'.qtt');
-			input['pheromon.'+type+'.proximity'] = (interractions.pheromons[type] && interractions.pheromons[type].proximity) || defaults('pheromon.'+type+'.proximity');
+			input['pheromon.'+type+'.qtt'] = R2one(interractions.pheromons[type] && interractions.pheromons[type].qtt) || defaults('pheromon.'+type+'.qtt');
+			input['pheromon.'+type+'.distance'] = (interractions.pheromons[type] && interractions.pheromons[type].proximity) || defaults('pheromon.'+type+'.distance');
+			input['pheromon.'+type+'.proximity'] = (interractions.pheromons[type] && (1-interractions.pheromons[type].proximity)) || defaults('pheromon.'+type+'.proximity');
 			output['pheromon.'+type+'.direction'] = base('pheromon.'+type+'.direction');
 			output['pheromon.'+type+'.radius'] = base('pheromon.'+type+'.radius');
 			output['pheromon.'+type+'.strength'] = base('pheromon.'+type+'.strength');
@@ -131,6 +133,7 @@ export var intelligence = {
 		output['velocity'] = base('velocity');
 		input['ant.strength'] = ant.strength*2-1;
 		input['ant.loaded'] = ant.loaded?1:-1;
+		input['random'] = Math.random()*2-1;
 		//output['action.drop'] = base('action.drop');
 		for(let i = 0; i < 5; ++i)
 			inputPheromon('p'+i);
@@ -145,8 +148,8 @@ export var intelligence = {
 				for(let n in neurons) {
 					let tv = neurons[n], comps = n.split('*');
 					if(''!== n) for(let i in comps)
-						tv *= one2R(input[comps[i]]);
-					output[o] += tv;
+						tv *= input[comps[i]];
+					output[o] += /*R2one*/(tv);
 				}
 				let dst = o.split('.'), tDirection = false;
 				if('direction'=== dst[2]) {
@@ -166,14 +169,14 @@ export var intelligence = {
 					pheromons[dst[1]][dst[2]] = 
 						'radius'=== dst[2]? 5*(1+R2one(output[o])):
 						'strength'=== dst[2]? R2one(output[o]):
-						/*'degeneration'=== dst[2]?*/ Math.pow(.01, 2+R2one(output[o])/2);
+						/*'degeneration'=== dst[2]?*/ Math.pow(.01, 1+R2one(output[o])/2);
 				}
 			}
 		}
 
 		return {
 			direction: direction.isZero()?ant.direction:direction.angle(),
-			velocity: 1+R2one(output.velocity)/2,
+			velocity: (1+R2one(output.velocity))/2,
 			action: {
 				grab: 0<output['action.grab'],
 				eat: 0<output['action.eat']/*,
@@ -207,8 +210,9 @@ export function endGame(score) {
 	nests.sort(function(a, b) { return b.score-a.score; })
 	$('#scoreMin').text(minS = nests[nests.length-1].score);
 	$('#scoreMax').text(maxS = nests[0].score);
-	if(nbrNests < nests.length) {
-		nests.pop();	//removes the "loser"
+	if(nbrNests < nests.length || (nbrNests == nests.length && undefined=== score)) {
+		if(undefined!== score)
+			nests.pop();	//removes the "loser"
 		var index = Math.random();
 		if(document.getElementById('checkBest').checked)
 			index = 0;

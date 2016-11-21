@@ -97,7 +97,7 @@ export class stain extends entity {
 				.invert()
 				.multiply(strength),
 			proximity: intensity.proximity,
-			strength: intensity.strength
+			qtt: intensity.strength
 		};
 	}
 	use(qtt, position) {

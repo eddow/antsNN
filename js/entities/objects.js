@@ -51,7 +51,7 @@ export class objects {
 			if(interraction = stain.interraction(coord)) {
 				direction.add(interraction.direction);
 				proximity *= interraction.proximity;
-				qtt += interraction.strength
+				qtt += interraction.qtt
 			}
 		return {direction, proximity, qtt};
 	}
