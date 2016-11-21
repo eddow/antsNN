@@ -2,7 +2,7 @@ import {vector} from "./entities.js";
 import {objects} from "./entities/objects.js";
 
 var nests = [], generation = 0, clearGame;
-const targetNbrLinks = {min: 10, max: 50}, nbrNests = 1;
+const targetNbrLinks = {min: 10, max: 50}, nbrNests = 100;
 
 function R2one(n) {
 	return 2*Math.atan(n)/Math.PI;
