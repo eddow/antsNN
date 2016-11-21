@@ -59,7 +59,6 @@ function antAdvance() {
 				ant.eat((1-toQueen) * ant.loaded.grass);
 				ant.loaded = false;
 			}
-
 		} else if(intel.action.grab) {
 			var qttAvail = interractn.grass.qtt;
 			if(qttAvail) {
@@ -82,7 +81,7 @@ function antAdvance() {
 				if(0< pheromon.strength && !ant.spoken[p] && (!interractn.pheromons[p] || 1 > interractn.pheromons[p].qtt)) {
 					ant.spoken[p] = 1;
 					pheromons[p].add(ant, pheromon.radius, pheromon.strength).degeneration = pheromon.degeneration;
-					ant.strength -= .001;
+					ant.strength -= .005;
 				}
 			}
 		}
