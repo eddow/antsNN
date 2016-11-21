@@ -61,14 +61,17 @@ export var intelligence = {
 			else
 				total -= numbers[i].length;
 		}
+		return {input: false, output: false};
 	},
 	mutationChangeOne() {
 		var {input, output} = this.mutationPick();
-		this.neurons[output][input] = one2R(2*Math.random()-1);
+		if(false!== input)
+			this.neurons[output][input] = one2R(2*Math.random()-1);
 	},
 	mutationDeleteOne() {
 		var {input, output} = this.mutationPick();
-		delete this.neurons[output][input];
+		if(false!== input)
+			delete this.neurons[output][input];
 	},
 	mutate() {
 		while(.8> Math.random())
