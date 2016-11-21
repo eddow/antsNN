@@ -133,7 +133,6 @@ export var intelligence = {
 		output['action.eat'] = base('action.eat');
 		output['velocity'] = base('velocity');
 		input['ant.strength'] = ant.strength*2-1;
-		input['ant.loaded'] = ant.loaded?1:-1;
 		input['random'] = Math.random()*2-1;
 		//output['action.drop'] = base('action.drop');
 		for(let i = 0; i < 5; ++i)
