@@ -81,7 +81,7 @@ function antAdvance() {
 				if(0< pheromon.strength && !ant.spoken[p] && (!interractn.pheromons[p] || 1 > interractn.pheromons[p].qtt)) {
 					ant.spoken[p] = 1;
 					pheromons[p].add(ant, pheromon.radius, pheromon.strength).degeneration = pheromon.degeneration;
-					ant.strength -= .005;
+					ant.strength -= .02;
 				}
 			}
 		}
@@ -110,9 +110,9 @@ function conditions() {
 	$('#counter').text(++counter + ' - ' + queen.ants.size);
 	var ants = queen.ants.size, score = false;
 	if(!ants)
-		score = ((gameLength/counter)-1) * (-startAnts);
+		score = ((gameLength/counter)-1) * (queen.resource-startAnts);
 	else if(counter > gameLength)
-		score = ants;
+		score = ants+queen.resource;
 	if(false!== score)
 		endGame(score);
 	plan(antAdvance);
