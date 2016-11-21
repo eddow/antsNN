@@ -70,8 +70,14 @@ export var intelligence = {
 		}
 	},
 	mutationChangeOne(nCnt) {
-		var {input, output} = this.mutationPick(nCnt);
+		var {input, output} = this.mutationPick(nCnt),
+			b4 = this.neurons[output][input];
 		this.neurons[output][input] += Math.random()-.5;
+		if(0> b4 * this.neurons[output][input]) {
+			delete this.neurons[output][input];
+			--nCnt.total;
+			nCnt[output].splice(nCnt[output].indexOf(input), 1);
+		}
 	},
 	mutationDeleteOne(nCnt) {
 		var {input, output} = this.mutationPick(nCnt);
@@ -82,9 +88,9 @@ export var intelligence = {
 	mutate() {
 		var nCnt = this.neuronCount();
 		while(.5> Math.random())
-			this.mutationDefaultOne();
+			this.mutationDefaultOne();/*
 		while(nCnt.total/targetNbrLinks.max> Math.random())
-			this.mutationDeleteOne(nCnt);
+			this.mutationDeleteOne(nCnt);*/
 		while(nCnt.total && 1-(targetNbrLinks.min/nCnt.total)> Math.random())
 			this.mutationChangeOne(nCnt);
 		while(targetNbrLinks.min/nCnt.total> Math.random()) {
