@@ -1,7 +1,7 @@
 import {vector} from "./entities.js";
 import {objects} from "./entities/objects.js";
 
-var nests = [], nbrNests = 100, generation = 0, clearGame;
+var nests = [], nbrNests = 10, generation = 0, clearGame;
 
 function R2one(n) {
 	return 2*Math.atan(n)/Math.PI;
@@ -48,40 +48,48 @@ export var intelligence = {
 	mutationDefaultOne() {
 		this.defaults[randomItem(Object.keys(this.defaults))] = one2R(2*Math.random()-1);
 	},
-	mutationPick() {
-		var numbers = {}, i, total = 0;
+	neuronCount() {
+		var nCnt = {}, i, total = 0;
 		for(i in this.neurons) {
-			numbers[i] = Object.keys(this.neurons[i]);
-			total += numbers[i].length;
+			nCnt[i] = Object.keys(this.neurons[i]);
+			total += nCnt[i].length;
 		}
-		total = Math.floor(Math.random()*total);
+		nCnt.total = total;
+		return nCnt;
+	},
+	mutationPick(nCnt) {
+		var i, tIndex;
+		tIndex = Math.floor(Math.random()*nCnt.total);
 		for(i in this.neurons) {
-			if(total< numbers[i].length)
-				return {output: i, input: numbers[i][total]};
+			if(tIndex< nCnt[i].length)
+				return {output: i, input: nCnt[i][tIndex]};
 			else
-				total -= numbers[i].length;
+				tIndex -= nCnt[i].length;
 		}
-		return {input: false, output: false};
 	},
-	mutationChangeOne() {
-		var {input, output} = this.mutationPick();
-		if(false!== input)
-			this.neurons[output][input] = one2R(2*Math.random()-1);
+	mutationChangeOne(nCnt) {
+		var {input, output} = this.mutationPick(nCnt);
+		this.neurons[output][input] = one2R(2*Math.random()-1);
 	},
-	mutationDeleteOne() {
-		var {input, output} = this.mutationPick();
-		if(false!== input)
-			delete this.neurons[output][input];
+	mutationDeleteOne(nCnt) {
+		var {input, output} = this.mutationPick(nCnt);
+		delete this.neurons[output][input];
+		--nCnt.total;
+		nCnt[output].splice(nCnt[output].indexOf(input), 1);
 	},
 	mutate() {
+		var nCnt = this.neuronCount();
+		const targetNbrLinks = {min: 100, max: 200};
 		while(.5> Math.random())
 			this.mutationDefaultOne();
-		while(.1> Math.random())
-			this.mutationDeleteOne();
-		while(.8> Math.random())
-			this.mutationChangeOne();
-		while(.2> Math.random())
+		while((nCnt.total/targetNbrLinks.max)> Math.random())
+			this.mutationDeleteOne(nCnt);
+		while(nCnt.total && .8> Math.random())
+			this.mutationChangeOne(nCnt);
+		while((1-(nCnt.total/targetNbrLinks.min)*.9)> Math.random()) {
 			this.mutationAddOne();
+			++nCnt.total;
+		}
 	},
 	layers(ant, interractions) {
 		var input = {}, output = {}, me = this;
