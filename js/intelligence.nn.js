@@ -2,7 +2,7 @@ import {vector} from "./entities.js";
 import {objects} from "./entities/objects.js";
 
 var nests = [], generation = 0, clearGame;
-const targetNbrLinks = {min: 10, max: 50}, nbrNests = 100;
+const targetNbrLinks = {min: 10, max: 50}, nbrNests = 1;
 
 function R2one(n) {
 	return 2*Math.atan(n)/Math.PI;
@@ -205,9 +205,9 @@ export function initIntelligence(clear) {
 }
 
 export function endGame(score) {
-	if(score < -10) score = undefined;
+	//if(score < -10) score = undefined;
 	if(undefined!== score)
-		nests.push(jquery.extend(true, intelligence.raw, {score}));
+		nests.push($.extend(true, {score}, intelligence.raw));
 	nests.sort(function(a, b) { return b.score-a.score; });
 	if(nbrNests < nests.length || (nbrNests == nests.length && undefined=== score)) {
 		if(undefined!== score)
@@ -218,7 +218,7 @@ export function endGame(score) {
 		else
 			index *= index * nests.length;	//[0..1[ square to chose more probably best ones
 		index = Math.floor(index);
-		intelligence.raw = nests[index];
+		intelligence.raw = $.extend(true, {}, nests[index]);
 		nests[index].score -= /*(maxS-minS)*/1;	//kill the father, 5 offsprings for the best
 		intelligence.mutate();
 	} else {
