@@ -129,6 +129,7 @@ export var intelligence = {
 		output['action.grab'] = base('action.grab');
 		output['action.eat'] = base('action.eat');
 		output['velocity'] = base('velocity');
+		input['ant.strength'] = ant.strength*2-1;
 		//output['action.drop'] = base('action.drop');
 		for(let i = 0; i < 5; ++i)
 			inputPheromon('p'+i);
