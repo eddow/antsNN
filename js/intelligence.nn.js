@@ -1,7 +1,7 @@
 import {vector} from "./entities.js";
 import {objects} from "./entities/objects.js";
 
-var nests = [], nbrNests = 10, generation = 0, clearGame;
+var nests = [], nbrNests = 100, generation = 0, clearGame;
 
 function R2one(n) {
 	return 2*Math.atan(n)/Math.PI;
