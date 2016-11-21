@@ -33,7 +33,8 @@ export var intelligence = {
 	neurons: {},
 	random() {
 		var i;
-		//for(i in this.base) this.base[i] = one2R(2*Math.random()-1);
+		this.defaults = $.extend(true, {}, this.defaults);
+		this.neurons = $.extend(true, {}, this.neurons);
 		for(i in this.defaults) this.defaults[i] = one2R(2*Math.random()-1);
 		for(i in io.output) {
 			this.neurons[i] = {};
