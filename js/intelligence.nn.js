@@ -2,7 +2,7 @@ import {vector} from "./entities.js";
 import {objects} from "./entities/objects.js";
 
 var nests = [], generation = 0, clearGame;
-const targetNbrLinks = {min: 10, max: 50}, nbrNests = 1;
+const targetNbrLinks = {min: 10, max: 50}, nbrNests = 100;
 
 function R2one(n) {
 	return 2*Math.atan(n)/Math.PI;
@@ -204,6 +204,7 @@ export function initIntelligence(clear) {
 }
 
 export function endGame(score) {
+	if(score < -10) score = undefined;
 	if(undefined!== score)
 		nests.push(Object.assign(intelligence.raw, {score}));
 	nests.sort(function(a, b) { return b.score-a.score; });
