@@ -1,7 +1,7 @@
 import {vector} from "./entities.js";
 import {objects} from "./entities/objects.js";
 
-var nests = [], nbrNests = 100, generation = 0, clearGame, sonOf = false;
+var nests = [], nbrNests = 100, generation = 0, clearGame;
 
 function R2one(n) {
 	return 2*Math.atan(n)/Math.PI;
@@ -200,16 +200,12 @@ export function initIntelligence(clear) {
 }
 
 export function endGame(score) {
-	var rawFather;
-	if(undefined!== score) {
-		if(false!== sonOf) {
-			rawFather = nests[sonOf];
-			nests[sonOf] = Object.assign(intelligence.raw, {score});
-		} else {
-			nests.push(Object.assign(intelligence.raw, {score}));
-		}
-	}
+	var minS, maxS;
+	if(undefined!== score)
+		nests.push(Object.assign(intelligence.raw, {score}));
 	nests.sort(function(a, b) { return b.score-a.score; })
+	$('#scoreMin').text(minS = nests[nests.length-1].score);
+	$('#scoreMax').text(maxS = nests[0].score);
 	if(nbrNests < nests.length) {
 		nests.pop();	//removes the "loser"
 		var index = Math.random();
@@ -217,20 +213,16 @@ export function endGame(score) {
 			index = 0;
 		else
 			index *= index * nests.length;	//[0..1[ square to chose more probably best ones
-		intelligence.raw = nests[sonOf = Math.floor(index)];
+		index = Math.floor(index);
+		intelligence.raw = nests[index];
+		nests[index].score -= (maxS-minS)/5;	//kill the father, 5 offsprings for the best
 		intelligence.mutate();
-	} else if(false!== sonOf) {
-		intelligence.raw = rawFather;
-		intelligence.mutate();
-		sonOf = false;
 	} else {
 		intelligence.random();
 	}
 	var average = 0;
 	for(let i in nests)
 		average += nests[i].score;
-	$('#scoreMin').text(nests[nests.length-1].score);
-	$('#scoreMax').text(nests[0].score);
 	$('#scoreAverage').text(average / nests.length);
 	$('#population').text(nests.length);
 	$('#generation').text(++generation);
