@@ -43,8 +43,14 @@ export class ant extends entity {
 		var o, p;
 		for(o of objects.stains) {
 			p = o.intensity(this);
-			if(p)
-				this.strength -= p.strength/lifeQty;
+			if(p) {
+				p = p.strength*o.strength;
+				this.strength -= p/*/lifeQty*/;
+				if(0< (o.strength -= p))
+					o.redraw();
+				else
+					o.remove()
+			}
 		}
 		this.strength -= Math.random()/500;
 		if(0>= this.strength) this.remove();
