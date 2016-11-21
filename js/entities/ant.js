@@ -68,7 +68,7 @@ export class ant extends entity {
 		return {
 			h: this.nest.hue,
 			s: this.strength,
-			b: .5,
+			b: this.loaded?.7:.3,
 			o: .7
 		};
 	}

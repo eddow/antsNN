@@ -130,6 +130,7 @@ export var intelligence = {
 		output['action.eat'] = base('action.eat');
 		output['velocity'] = base('velocity');
 		input['ant.strength'] = ant.strength*2-1;
+		input['ant.loaded'] = ant.loaded?1:-1;
 		//output['action.drop'] = base('action.drop');
 		for(let i = 0; i < 5; ++i)
 			inputPheromon('p'+i);
@@ -215,7 +216,7 @@ export function endGame(score) {
 			index *= index * nests.length;	//[0..1[ square to chose more probably best ones
 		index = Math.floor(index);
 		intelligence.raw = nests[index];
-		nests[index].score -= (maxS-minS)/5;	//kill the father, 5 offsprings for the best
+		nests[index].score -= /*(maxS-minS)*/5;	//kill the father, 5 offsprings for the best
 		intelligence.mutate();
 	} else {
 		intelligence.random();
