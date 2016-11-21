@@ -46,7 +46,7 @@ export var intelligence = {
 		this.neurons[itm][combo] = one2R(2*Math.random()-1);
 	},
 	mutationDefaultOne() {
-		this.defaults[randomItem(Object.keys(this.defaults))] = one2R(2*Math.random()-1);
+		this.defaults[randomItem(Object.keys(this.defaults))] += Math.random()-.5;
 	},
 	neuronCount() {
 		var nCnt = {}, i, total = 0;
@@ -69,7 +69,7 @@ export var intelligence = {
 	},
 	mutationChangeOne(nCnt) {
 		var {input, output} = this.mutationPick(nCnt);
-		this.neurons[output][input] = one2R(2*Math.random()-1);
+		this.neurons[output][input] += Math.random()-.5;
 	},
 	mutationDeleteOne(nCnt) {
 		var {input, output} = this.mutationPick(nCnt);
