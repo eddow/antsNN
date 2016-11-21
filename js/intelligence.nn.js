@@ -74,13 +74,13 @@ export var intelligence = {
 			delete this.neurons[output][input];
 	},
 	mutate() {
-		while(.8> Math.random())
-			this.mutationChangeOne();
 		while(.5> Math.random())
 			this.mutationDefaultOne();
 		while(.1> Math.random())
 			this.mutationDeleteOne();
-		while(.1> Math.random())
+		while(.8> Math.random())
+			this.mutationChangeOne();
+		while(.2> Math.random())
 			this.mutationAddOne();
 	},
 	layers(ant, interractions) {
