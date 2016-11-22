@@ -52,7 +52,8 @@ export var intelligence = {
 	},
 	neuronCount() {
 		var nCnt = {}, i, total = 0;
-		for(i in this.neurons) {
+		for(i in io.output) {
+			if(!this.neurons[i]) this.neurons[i] = [];
 			nCnt[i] = Object.keys(this.neurons[i]);
 			total += nCnt[i].length;
 		}
@@ -138,6 +139,7 @@ export var intelligence = {
 		output['action.grab'] = base('action.grab');
 		output['action.eat'] = base('action.eat');
 		output['velocity'] = base('velocity');
+		output['inertia.direction'] = base('velocity');
 		input['ant.strength'] = ant.strength*2-1;
 		input['random'] = Math.random()*2-1;
 		//output['action.drop'] = base('action.drop');
@@ -158,7 +160,9 @@ export var intelligence = {
 					output[o] += /*R2one*/(tv);
 				}
 				let dst = o.split('.'), tDirection = false;
-				if('direction'=== dst[2]) {
+				if('inertia.direction'=== o)
+					direction.add(new vector(output[o]*Math.cos(ant.direction), output[o]*Math.sin(ant.direction)));
+				else if('direction'=== dst[2]) {
 					if('pheromon'=== dst[0])
 						tDirection = interractions.pheromons;
 					else if('object'=== dst[0])
@@ -194,7 +198,6 @@ export var intelligence = {
 }
 var io = intelligence.layers({}, {pheromons:{}}),
 	inputNames = Object.keys(io.input);
-
 
 export function initIntelligence(clear) {
 	clearGame = clear;
