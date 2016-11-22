@@ -1,0 +1,103 @@
+{
+	"nests": [{
+			"neurons": {
+				"object.lava.direction": {
+					"": -10
+				},
+				"object.grass.direction": {
+					"": 5,
+					"ant.loaded.grass": -10
+				},
+				"object.queen.direction": {
+					"ant.loaded.grass": 10
+				},
+				"action.grab": {
+					"": -1,
+					"random": 0.4,
+					"object.grass.proximity": 3
+				},
+				"action.eat": {
+					"": -1,
+					"object.queen.proximity": 3,
+					"ant.strength": -2
+				},
+				"velocity": {
+				},
+				"pheromon.p0.direction": {
+					"": -3
+				},
+				"pheromon.p0.radius": {
+					"": 100
+				},
+				"pheromon.p0.strength": {
+					"object.lava.qtt": 10
+				},
+				"pheromon.p0.degeneration": {
+					"": 100
+				},
+				"pheromon.p1.direction": {
+					"pheromon.p1.qtt": 1,
+					"ant.loaded.grass*pheromon.p1.qtt": -3
+				},
+				"pheromon.p1.radius": {
+					"": 100
+				},
+				"pheromon.p1.strength": {
+					"object.grass.qtt": 10
+				},
+				"pheromon.p1.degeneration": {
+					"": 100
+				},
+				"pheromon.p2.direction": {
+					"ant.loaded.grass": 3
+				},
+				"pheromon.p2.radius": {
+					"": 100
+				},
+				"pheromon.p2.strength": {
+					"object.queen.qtt": 10
+				},
+				"pheromon.p2.degeneration": {
+					"": 100
+				},
+				"pheromon.p3.direction": {
+				},
+				"pheromon.p3.radius": {
+				},
+				"pheromon.p3.strength": {
+				},
+				"pheromon.p3.degeneration": {
+				},
+				"pheromon.p4.direction": {
+				},
+				"pheromon.p4.radius": {
+				},
+				"pheromon.p4.strength": {
+				},
+				"pheromon.p4.degeneration": {
+				}
+			},
+			"defaults": {
+				"loaded.grass": -1,
+				"object.lava.qtt": -1,
+				"object.lava.proximity": -1,
+				"object.grass.qtt": -1,
+				"object.grass.proximity": -0.1,
+				"object.queen.qtt": -1,
+				"object.queen.proximity": -0.1,
+				"pheromon.p0.qtt": 0,
+				"pheromon.p0.proximity": 0,
+				"pheromon.p1.qtt": 0,
+				"pheromon.p1.proximity": 0,
+				"pheromon.p2.qtt": 0,
+				"pheromon.p2.proximity": 0,
+				"pheromon.p3.qtt": 0,
+				"pheromon.p3.proximity": 0,
+				"pheromon.p4.qtt": 0,
+				"pheromon.p4.proximity": 0
+			},
+			"score": 20
+		}
+	],
+	"generation": 1
+}
