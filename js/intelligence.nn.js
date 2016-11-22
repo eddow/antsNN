@@ -80,18 +80,10 @@ export var intelligence = {
 			nCnt[output].splice(nCnt[output].indexOf(input), 1);
 		}
 	},
-	mutationDeleteOne(nCnt) {
-		var {input, output} = this.mutationPick(nCnt);
-		delete this.neurons[output][input];
-		--nCnt.total;
-		nCnt[output].splice(nCnt[output].indexOf(input), 1);
-	},
 	mutate() {
 		var nCnt = this.neuronCount();
 		while(.5> Math.random())
-			this.mutationDefaultOne();/*
-		while(nCnt.total/targetNbrLinks.max> Math.random())
-			this.mutationDeleteOne(nCnt);*/
+			this.mutationDefaultOne();
 		while(nCnt.total && 1-(targetNbrLinks.min/nCnt.total)> Math.random())
 			this.mutationChangeOne(nCnt);
 		while(targetNbrLinks.min/nCnt.total> Math.random()) {
@@ -102,10 +94,7 @@ export var intelligence = {
 	layers(ant, interractions) {
 		var input = {}, output = {}, me = this;
 		function base(type) {
-			return 0;/*
-			if(undefined=== me.base[type])
-				me.base[type] = 0;
-			return me.base[type];*/
+			return 0;
 		}
 		function defaults(type) {
 			if(undefined=== me.defaults[type])
@@ -157,7 +146,7 @@ export var intelligence = {
 					let tv = neurons[n], comps = n.split('*');
 					if(''!== n) for(let i in comps)
 						tv *= input[comps[i]];
-					output[o] += /*R2one*/(tv);
+					output[o] += tv;
 				}
 				let dst = o.split('.'), tDirection = false;
 				if('inertia.direction'=== o)
@@ -227,7 +216,7 @@ export function endGame(score) {
 			index *= index * nests.length;	//[0..1[ square to chose more probably best ones
 		index = Math.floor(index);
 		intelligence.raw = $.extend(true, {}, nests[index]);
-		nests[index].score -= /*(maxS-minS)*/1;	//kill the father, 5 offsprings for the best
+		nests[index].score -= 1;	//kill the father slowly at each offspring
 		intelligence.mutate();
 	} else {
 		intelligence.random();

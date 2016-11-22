@@ -3,8 +3,6 @@ import {random, tau, torus, modulo} from "../math.js";
 import {board} from "../board.js";
 import {draw} from "../draw.js";
 
-const lifeQty = 20;
-
 export class ant extends entity {
 	constructor(position, nest) {
 		super(position);
@@ -45,7 +43,7 @@ export class ant extends entity {
 			p = o.intensity(this);
 			if(p) {
 				p = p.strength*o.strength;
-				this.strength -= p/*/lifeQty*/;
+				this.strength -= p;
 				if(0< (o.strength -= p))
 					o.redraw();
 				else
@@ -63,18 +61,20 @@ export class ant extends entity {
 		this.nest.ants.delete(this);
 	}
 	redraw() {
+		var angle = Math.atan(this.strength);
 		this.points = [
 			(new vector(1)).rotate(this.direction+Math.PI).add(this),
-			(new vector(1)).rotate(this.direction+Math.PI+2.9).add(this),
-			(new vector(1)).rotate(this.direction+Math.PI-2.9).add(this)
+			(new vector(1)).rotate(this.direction+angle).add(this),
+			(new vector(1)).rotate(this.direction).add(this),
+			(new vector(1)).rotate(this.direction-angle).add(this)
 		];
 		super.redraw();
 	}
 	get fill() {
 		return {
 			h: this.nest.hue,
-			s: this.strength,
-			b: this.loaded?.7:.3,
+			s: .5,
+			b: this.loaded?.25+this.loaded.grass:.25,
 			o: .7
 		};
 	}
