@@ -54,7 +54,7 @@ function antAdvance() {
 			if(intel.action.drop) {
 				ant.loaded = false;
 			} else if(intel.action.eat) {
-				var toQueen = Math.pow(.5, (new vector(ant)).subtract(queen).lengthSq() / (queen.radius*queen.radius));
+				var toQueen = Math.max(0, 1- (new vector(ant)).subtract(queen).lengthSq() / (queen.radius*queen.radius));
 				queen.eat(toQueen * ant.loaded.grass);
 				ant.eat((1-toQueen) * ant.loaded.grass);
 				ant.loaded = false;

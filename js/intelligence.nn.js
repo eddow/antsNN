@@ -112,7 +112,7 @@ export var intelligence = {
 			return R2one(me.defaults[type]);
 		}
 		function inputLoaded(type) {
-			input['loaded.'+type] = (ant.loaded && ant.loaded[type]) || defaults('loaded.'+type);
+			input['ant.loaded.'+type] = (ant.loaded && ant.loaded[type]) || defaults('loaded.'+type);
 		}
 		function inputObjects(type) {
 			input['object.'+type+'.qtt'] = R2one(interractions[type] && interractions[type].qtt) || defaults('object.'+type+'.qtt');
