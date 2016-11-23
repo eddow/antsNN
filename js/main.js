@@ -9,7 +9,7 @@ import {intelligence, initIntelligence, endGame} from "./intelligence.nn.js";
 var lava = new objects('background', 0), grass = new objects('background', 100),
 	queen = new nest(300, [board.middle, board.middle], 10),
 	{pheromons} = initIntelligence(clearGame),
-	gameLength = 3000, startAnts = 10,
+	gameLength = 2000, startAnts = 10,
 	counter = 0;
 intelligence.random();
 
