@@ -59,12 +59,13 @@ function antAdvance() {
 				ant.eat((1-toQueen) * ant.loaded.grass);
 				ant.loaded = false;
 			}
-		} else if(intel.action.grab) {
+		} 
+		if(intel.action.grab) {
 			var qttAvail = interractn.grass.qtt;
 			if(qttAvail) {
-				ant.loaded = {
-					grass: grass.use(Math.min(1/qttAvail, ant.carry), ant)
-				};
+				qttAvail = grass.use(Math.min(1/qttAvail, ant.carry-((ant.loaded && ant.loaded.grass)||0)), ant)
+				if(!ant.loaded) ant.loaded = {grass: 0};
+				ant.loaded.grass += qttAvail;
 			}
 		}
 
