@@ -34,12 +34,91 @@ function completeColors(svgItem, colorSpec) {
 var redraw = {
 	circle: function() {
 		if(!draw.draw) return;
-		var p = this.parent;
-		this.parts.main.attr(completeColors({
-			cx: Math.round(p.x*multiplicator),
-			cy: Math.round(p.y*multiplicator),
-			r: Math.round(p.radius*multiplicator)
+		var p = this.parent,
+			x = p.x, y = p.y, r = p.radius,
+			parts = this.parts, type = this.type;
+		parts.main.attr(completeColors({
+			cx: Math.round(x*multiplicator),
+			cy: Math.round(y*multiplicator),
+			r: Math.round(r*multiplicator)
 		}, p));
+		if(board.size< x+r) {
+			(parts.left || (parts.left = draw.addSvg('circle', type))).attr(completeColors({
+				cx: Math.round(x-board.size*multiplicator),
+				cy: Math.round(y*multiplicator),
+				r: Math.round(r*multiplicator)
+			}, p));
+			if(board.size< y+r) {
+				(parts.up_left || (parts.up_left = draw.addSvg('circle', type))).attr(completeColors({
+					cx: Math.round(x-board.size*multiplicator),
+					cy: Math.round(y-board.size*multiplicator),
+					r: Math.round(r*multiplicator)
+				}, p));
+			} else {
+				if(parts.up_left) { parts.up_left.remove(); delete parts.up_left; }
+			}
+			if(0> y-r) {
+				(parts.down_left || (parts.down_left = draw.addSvg('circle', type))).attr(completeColors({
+					cx: Math.round(x-board.size*multiplicator),
+					cy: Math.round(y+board.size*multiplicator),
+					r: Math.round(r*multiplicator)
+				}, p));
+			} else {
+				if(parts.down_left) { parts.down_left.remove(); delete parts.down_left; }
+			}
+		} else {
+			if(parts.left) { parts.left.remove(); delete parts.left; }
+			if(parts.up_left) { parts.up_left.remove(); delete parts.up_left; }
+			if(parts.down_left) { parts.down_left.remove(); delete parts.down_left; }
+		}
+		if(0> x-r) {
+			(parts.right || (parts.right = draw.addSvg('circle', type))).attr(completeColors({
+				cx: Math.round(x+board.size*multiplicator),
+				cy: Math.round(y*multiplicator),
+				r: Math.round(r*multiplicator)
+			}, p));
+			if(board.size< y+r) {
+				(parts.up_right || (parts.up_right = draw.addSvg('circle', type))).attr(completeColors({
+					cx: Math.round(x+board.size*multiplicator),
+					cy: Math.round(y-board.size*multiplicator),
+					r: Math.round(r*multiplicator)
+				}, p));
+			} else {
+				if(parts.up_right) { parts.up_right.remove(); delete parts.up_right; }
+			}
+			if(0> y-r) {
+				(parts.down_right || (parts.down_right = draw.addSvg('circle', type))).attr(completeColors({
+					cx: Math.round(x+board.size*multiplicator),
+					cy: Math.round(y+board.size*multiplicator),
+					r: Math.round(r*multiplicator)
+				}, p));
+			} else {
+				if(parts.down_right) { parts.down_right.remove(); delete parts.down_right; }
+			}
+		} else {
+			if(parts.right) { parts.right.remove(); delete parts.right; }
+			if(parts.up_right) { parts.up_right.remove(); delete parts.up_right; }
+			if(parts.down_right) { parts.down_right.remove(); delete parts.down_right; }
+		}
+		if(board.size< y+r) {
+			(parts.up || (parts.up = draw.addSvg('circle', type))).attr(completeColors({
+				cx: Math.round(x*multiplicator),
+				cy: Math.round(y-board.size*multiplicator),
+				r: Math.round(r*multiplicator)
+			}, p));
+		} else {
+			if(parts.up) { parts.up.remove(); delete parts.up; }
+		}
+		if(0> y-r) {
+			(parts.down || (parts.down = draw.addSvg('circle', type))).attr(completeColors({
+				cx: Math.round(x*multiplicator),
+				cy: Math.round(y+board.size*multiplicator),
+				r: Math.round(r*multiplicator)
+			}, p));
+		} else {
+			if(parts.down) { parts.down.remove(); delete parts.down; }
+		}
+
 	},
 	path: function() {
 		if(!draw.draw) return;
@@ -84,6 +163,7 @@ export var draw = {
 	addCircle(parent, type) {
 		return this.add({
 			parent,
+			type,
 			parts: {main: this.addSvg('circle', type)},
 			redraw: redraw.circle
 		});
@@ -91,6 +171,7 @@ export var draw = {
 	addPolygon(parent, type) {
 		return this.add({
 			parent,
+			type,
 			parts: {main: this.addSvg('path', type)},
 			redraw: redraw.path
 		});

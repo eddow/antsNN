@@ -43,6 +43,7 @@ export class ant extends entity {
 			p = o.intensity(this);
 			if(p) {
 				p = p.strength*o.strength;
+				p = Math.min(o.strength, Math.max(p, .001));	//don't take less than .001 or the remaining strength if it is smaller
 				this.strength -= p;
 				if(0< (o.strength -= p))
 					o.redraw();

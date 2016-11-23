@@ -107,7 +107,8 @@ export class stain extends entity {
 			if(!intensity) return 0;
 			qtt *= intensity.strength;	//we take less if we are further
 		}
-		qtt = Math.min(qtt||this.degeneration||.001, this.strength);
+		//don't take less than .001 or the remaining strength if it is smaller
+		qtt = Math.min(Math.max(qtt||this.degeneration||0, .001), this.strength);
 		if(this.strength -= qtt)
 			this.redraw();
 		else
