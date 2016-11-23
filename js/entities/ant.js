@@ -20,6 +20,7 @@ export class ant extends entity {
 		});
 		this.redraw();
 	}
+	get radius() { return 5; }
 	roundDir(add) {
 		if(add) this.direction += add;
 		this.direction = modulo(this.direction);

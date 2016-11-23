@@ -1,4 +1,4 @@
-import {entity, stain, vector, drawnVector} from "../entities.js";
+import {entity, stain, vector} from "../entities.js";
 import {board} from "../board.js";
 import {random} from "../math.js";
 
@@ -30,13 +30,12 @@ export class objects {
 			brightness,
 			stains: new Set()
 		});
-		board.mouseListeners.add(function(coord) { me.drawVect(coord); });
-		this.indic = new drawnVector(this);
+		//board.mouseListeners.add(function(coord) { me.drawVect(coord); });
 	}
 	clear() {
 		for(let stain of this.stains)
 			stain.remove();
-	}
+	}/*
 	drawVect(coord) {
 		if(!coord) this.indic.move();
 		else {
@@ -44,7 +43,7 @@ export class objects {
 			var intrctn = this.interraction(coord);
 			this.indic.move(coord, intrctn.direction);
 		}
-	}
+	}*/
 	interraction(coord) {
 		var stain, interraction, direction = new vector(0,0), proximity = 1, qtt = 0;
 		for(stain of this.stains)
@@ -87,6 +86,11 @@ export class objects {
 			for(j=0; j<number; ++j)
 				this.add(vector.around(size, point), decide(config.radius), decide(config.strength));
 		}
+		return rv;
+	}
+	count() {
+		var rv = 0;
+		for(let stain of this.stains) rv += stain.strength;
 		return rv;
 	}
 }

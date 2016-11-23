@@ -6,9 +6,9 @@ export var board = {
 	size: 100,
 	get middle() { return this.size/2; },
 	randomPoint() {
-		//return new vector(random(this.size), random(this.size));
+		return new vector(random(this.size), random(this.size));/*
 		var angle = random(tau);
-		return new vector(50*(Math.cos(angle)+1), 50*(Math.sin(angle)+1));
+		return new vector(50*(Math.cos(angle)+1), 50*(Math.sin(angle)+1)); //*/
 	},
 	clip(vect) {
 		var s = this.size;

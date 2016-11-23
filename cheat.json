@@ -61,12 +61,16 @@
 					"": 100
 				},
 				"pheromon.p3.direction": {
+					"": -10
 				},
 				"pheromon.p3.radius": {
+					"": 1
 				},
 				"pheromon.p3.strength": {
+					"": 0.1
 				},
 				"pheromon.p3.degeneration": {
+					"": 0
 				},
 				"pheromon.p4.direction": {
 				},

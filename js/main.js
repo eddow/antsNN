@@ -9,8 +9,8 @@ import {intelligence, initIntelligence, endGame} from "./intelligence.nn.js";
 var lava = new objects('background', 0), grass = new objects('background', 100),
 	queen = new nest(300, [board.middle, board.middle], 10),
 	{pheromons} = initIntelligence(clearGame),
-	gameLength = 2000, startAnts = 10,
-	counter = 0, planCounter = 100;
+	gameLength = 5000, startAnts = 10,
+	counter = 0;
 intelligence.random();
 
 function clearGame() {
@@ -33,11 +33,22 @@ function clearGame() {
 	for(let p in pheromons) pheromons[p].clear();
 	counter = 0;
 }
+var planned = false;
 function plan(cb) {
-	if(draw.draw || !--planCounter) {
-		setTimeout(cb, 1);
-		planCounter = 200;
-	} else cb();
+	if(draw.draw) {
+		setTimeout(cb);
+	} else {
+		if(false=== planned)
+			setTimeout(function() {
+				if(!draw.draw)
+					for(let i=0; i<200; ++i)
+						planned();
+				var next = planned;
+				planned = false;
+				plan(next);
+			});
+		planned = cb;
+	}
 }
 function antAdvance() {
 	var interractors = {lava, grass, queen};
@@ -98,6 +109,19 @@ function wound() {
 		ant.wound(lava);
 	for(let p in pheromons)
 		pheromons[p].use();
+	plan(keepObjects);
+}
+
+function keepObjects() {
+	var i, objects = {grass, lava};
+	for(i in objects)
+		if(80> objects[i].count())
+			objects[i].spawn(1, {
+				number: [20, 50],
+				size: [5, 15],
+				radius: [1, 3],
+				strength: [.1, 1]
+			});
 	plan(redraw);
 }
 
@@ -115,7 +139,7 @@ function conditions() {
 	else if(counter > gameLength)
 		score = ants+queen.resource;
 	if(false!== score)
-		endGame(score);
+		endGame(intelligence, score);
 	plan(antAdvance);
 }
 

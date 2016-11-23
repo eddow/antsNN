@@ -201,7 +201,7 @@ export function initIntelligence(clear) {
 	}
 }
 
-export function endGame(score) {
+export function endGame(intelligence, score) {
 	//if(score < -10) score = undefined;
 	if(undefined!== score)
 		nests.push($.extend(true, {score}, intelligence.raw));
@@ -258,7 +258,7 @@ function receivedText() {
 	var vals = JSON.parse(fr.result);
 	nests = vals.nests;
 	generation = vals.generation-1;
-	endGame();
+	endGame(intelligence);
 }
 $('#loadCmd').click(function() {
 	var input = $('#loadFile')[0];

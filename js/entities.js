@@ -67,6 +67,16 @@ export class entity extends vector {
 	redraw() {
 		this.drawn.redraw();
 	}
+	intensity(position) {
+		position = board.distance(position, this);
+		var dist = position.length();
+		if(dist >= this.radius) return false;
+		return {
+			position,
+			strength: 1- (dist/this.radius),
+			proximity: dist/this.radius
+		};
+	}
 }
 
 export class stain extends entity {
@@ -77,16 +87,6 @@ export class stain extends entity {
 			strength: strength || 1,
 			drawn: draw.addCircle(this, type || 'background')
 		});
-	}
-	intensity(position) {
-		position = board.distance(position, this);
-		var dist = position.length();
-		if(dist >= this.radius) return false;
-		return {
-			position,
-			strength: 1- (dist/this.radius),
-			proximity: dist/this.radius
-		};
 	}
 	interraction(position) {
 		var intensity = this.intensity(position);
@@ -114,33 +114,5 @@ export class stain extends entity {
 		else
 			this.remove()
 		return qtt;
-	}
-}
-
-export class drawnVector {
-	constructor(group) {
-		Object.assign(this, {
-			group,
-			line: draw.addPolygon(this, 'helpers')
-		});
-	}
-	get stroke() {
-		return {
-			h: this.group.hue,
-			s: .5,
-			b: .3,
-			o: 1
-		};
-	}
-	move(position, direction) {
-		if(!position) this.points = [];
-		else {
-			position = new vector(position);
-			this.points = [
-				position,
-				new vector(direction).add(position)
-			]
-		}
-		this.line.redraw();
 	}
 }
