@@ -6,10 +6,10 @@ import {draw} from "./draw.js";
 import {intelligence, initIntelligence, endGame} from "./intelligence.nn.js";
 
 
+const gameLength = 2000, startAnts = 10, maxAnts = 100;
 var lava = new objects('background', 0), grass = new objects('background', 100),
 	queen = new nest(300, [board.middle, board.middle], 10),
 	{pheromons} = initIntelligence(clearGame),
-	gameLength = 2000, startAnts = 10,
 	counter = 0;
 intelligence.random();
 
@@ -134,10 +134,12 @@ function redraw() {
 function conditions() {
 	$('#counter').text(++counter + ' - ' + queen.ants.size);
 	var ants = queen.ants.size, score = false;
-	if(!ants)
+	if(1>= ants)
 		score = ((gameLength/counter)-1) * (queen.resource-startAnts);
 	else if(counter > gameLength)
 		score = ants+queen.resource;
+	else if(ants >= maxAnts)
+		score = maxAnts*gameLength/counter;
 	if(false!== score)
 		endGame(intelligence, score);
 	plan(antAdvance);

@@ -2,7 +2,7 @@ import {vector} from "./entities.js";
 import {objects} from "./entities/objects.js";
 
 var nests = [], generation = 0, clearGame;
-const targetNbrLinks = {min: 10, max: 50}, nbrNests = 100;
+const targetNbrLinks = {min: 30, max: 50}, nbrNests = 100;
 
 function R2one(n) {
 	return 2*Math.atan(n)/Math.PI;
@@ -42,13 +42,16 @@ export var intelligence = {
 				this.neurons[i][randomInputCombo(inputNames)] = one2R(2*Math.random()-1);
 		}
 	},
+	mutation() {
+		return Math.random()*2-1;
+	},
 	mutationAddOne() {
 		var itm = randomItem(Object.keys(this.neurons)),
 			combo = randomInputCombo(inputNames);
-		this.neurons[itm][combo] = Math.random()-0.5;
+		this.neurons[itm][combo] = this.mutation();
 	},
 	mutationDefaultOne() {
-		this.defaults[randomItem(Object.keys(this.defaults))] += Math.random()-.5;
+		this.defaults[randomItem(Object.keys(this.defaults))] += this.mutation();
 	},
 	neuronCount() {
 		var nCnt = {}, i, total = 0;
@@ -73,7 +76,7 @@ export var intelligence = {
 	mutationChangeOne(nCnt) {
 		var {input, output} = this.mutationPick(nCnt),
 			b4 = this.neurons[output][input];
-		this.neurons[output][input] += Math.random()-.5;
+		this.neurons[output][input] += this.mutation();
 		if(0> b4 * this.neurons[output][input]) {
 			delete this.neurons[output][input];
 			--nCnt.total;
