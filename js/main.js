@@ -12,22 +12,17 @@ var lava = new objects('background', 0), grass = new objects('background', 100),
 	{pheromons} = initIntelligence(clearGame),
 	counter = 0;
 intelligence.random();
-
+const objectSpawning = {
+	number: [20, 50],
+	size: [5, 30],
+	radius: [1, 3],
+	strength: [.1, 1]
+};
 function clearGame() {
 	lava.clear();
-	lava.spawn(5, {
-		number: [20, 50],
-		size: [5, 15],
-		radius: [1, 3],
-		strength: [.1, 1]
-	});
+	lava.spawn(5, objectSpawning);
 	grass.clear();
-	grass.spawn(5, {
-		number: [20, 50],
-		size: [5, 15],
-		radius: [1, 3],
-		strength: [.1, 1]
-	});
+	grass.spawn(5, objectSpawning);
 	queen.clear();
 	queen.spawn(startAnts);
 	for(let p in pheromons) pheromons[p].clear();
@@ -116,12 +111,7 @@ function keepObjects() {
 	var i, objects = {grass, lava};
 	for(i in objects)
 		if(80> objects[i].count())
-			objects[i].spawn(1, {
-				number: [20, 50],
-				size: [5, 15],
-				radius: [1, 3],
-				strength: [.1, 1]
-			});
+			objects[i].spawn(1, objectSpawning);
 	plan(redraw);
 }
 

@@ -1,6 +1,6 @@
 import {vector} from "./entities.js";
 import {random, torus, modulo, tau} from "./math.js";
-
+const objectsRadius = 30;
 export var board = {
 	mouseListeners: new Set(),
 	size: 100,
@@ -8,7 +8,7 @@ export var board = {
 	randomPoint() {
 		//return new vector(random(this.size), random(this.size));/*
 		var angle = random(tau);
-		return new vector(50*(Math.cos(angle)+1), 50*(Math.sin(angle)+1)); //*/
+		return new vector(board.middle+objectsRadius*Math.cos(angle), board.middle+objectsRadius*Math.sin(angle)); //*/
 	},
 	clip(vect) {
 		var s = this.size;
