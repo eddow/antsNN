@@ -43,7 +43,7 @@ export var intelligence = {
 		}
 	},
 	mutation() {
-		return Math.random()*2-1;
+		return Math.random()*6-3;
 	},
 	mutationAddOne() {
 		var itm = randomItem(Object.keys(this.neurons)),

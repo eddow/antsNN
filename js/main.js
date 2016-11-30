@@ -14,7 +14,7 @@ var lava = new objects('background', 0), grass = new objects('background', 100),
 intelligence.random();
 const objectSpawning = {
 	number: [20, 50],
-	size: [5, 30],
+	size: [5, 50],
 	radius: [1, 3],
 	strength: [.1, 1]
 };
