@@ -244,7 +244,7 @@ export function endGame(intelligence, score) {
 		if(document.getElementById('checkBest').checked)
 			intelligence.raw = $.extend(true, {}, nests[0]);
 		else {
-			var i, index, nbr = randomNdx(3, 1), orgy = [];
+			var i, index, nbr = 1/*randomNdx(3, 1)*/, orgy = [];
 			while(orgy.length < nbr) {
 				index = random();
 				index *= index * nests.length;	//[0..1[ square to chose more probably best ones
@@ -263,14 +263,12 @@ export function endGame(intelligence, score) {
 	$('#scoreAverage').text(average / nests.length);
 	$('#scoreMin').text(nests[nests.length-1].score);
 	$('#scoreMax').text(nests[0].score);
-	$('#population').text(nests.length);
 	$('#generation').text(++generation);
 	clearGame();
 }
 
 $("#infos").append(`
 	<div>Generation:<span id="generation"></span></div>
-	<div>population:<span id="population"></span></div>
 	<div>Max:<span id="scoreMax"></span></div>
 	<div>Average:<span id="scoreAverage"></span></div>
 	<div>Min:<span id="scoreMin"></span></div>
