@@ -73,7 +73,10 @@ function antAdvance() {
 				if(!ant.loaded) ant.loaded = {grass: 0};
 				ant.loaded.grass += qttAvail;
 			}
+			ant.strength -= .005;
 		}
+		if(intel.action.eat)
+			ant.strength -= .005;
 
 		for(let i in ant.spoken)
 			if(0>(ant.spoken[i]-= ant.talkative))
