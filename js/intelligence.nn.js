@@ -213,7 +213,7 @@ function sex(nests) {
 	};
 	for(i in nests) nests[i].score = Math.pow(expAdvantage, nests[i].score);
 	for(i in nests) maxR += nests[i].score;
-	function mix(type) {
+	function mix(type, copy) {
 		var i, j, chx, pDetect;
 		for(i in nests[0][type]) {
 			pDetect = i.split('.');
@@ -224,11 +224,11 @@ function sex(nests) {
 				if('pheromon'=== pDetect[0])
 					pheromonChoices[pDetect[1]] = j;
 			}
-			rv[type][i] = nests[j][type][i];
+			rv[type][i] = copy(nests[j][type][i]);
 		}
 	}
-	mix('neurons');
-	mix('defaults');
+	mix('neurons', function(x) { return $.extend(true, {}, x); });
+	mix('defaults', function(x) { return x; });
 	for(i in nests) nests[i].score = (Math.log(nests[i].score)/Math.log(expAdvantage))-(nests[i].score/maxR);
 	return rv;
 }
@@ -253,8 +253,8 @@ export function endGame(intelligence, score) {
 					orgy.push(nests[index]);
 			}
 			intelligence.raw = sex(orgy);
+			intelligence.mutate();
 		}
-		intelligence.mutate();
 	} else
 		intelligence.random();
 	var average = 0;
