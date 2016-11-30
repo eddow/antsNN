@@ -229,7 +229,7 @@ function sex(nests) {
 	}
 	mix('neurons');
 	mix('defaults');
-	for(i in nests) nests[i].score -= (Math.log(nests[i].score)/Math.log(expAdvantage))-(nests[i].score/maxR);
+	for(i in nests) nests[i].score = (Math.log(nests[i].score)/Math.log(expAdvantage))-(nests[i].score/maxR);
 	return rv;
 }
 
