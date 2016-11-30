@@ -8,6 +8,9 @@ export var max = Math.max;
 export function random(max, min) {
 	return (Math.random()*((max||1)-(min||0)))+(min||0);
 }
+export function randomNdx(max, min) {
+	return Math.floor(random(max, min));
+}
 
 /**
  * gets the smallest in absolute X-ref considering X == X+k*mod && ref == ref + l*mod
