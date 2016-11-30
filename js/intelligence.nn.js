@@ -252,7 +252,7 @@ export function endGame(intelligence, score) {
 				if(0> orgy.indexOf(nests[index]))
 					orgy.push(nests[index]);
 			}
-			intelligence.raw = sex([nests[0], nests[1]]/*orgy*/);
+			intelligence.raw = sex(orgy);
 		}
 		intelligence.mutate();
 	} else
