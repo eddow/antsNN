@@ -252,9 +252,10 @@ export function endGame(intelligence, score) {
 				if(0> orgy.indexOf(nests[index]))
 					orgy.push(nests[index]);
 			}
-			if(1== nbr)
+			if(1== nbr) {
 				intelligence.raw = $.extend(true, {}, orgy[0]);
-			else
+				--orgy[0].score;
+			} else
 				intelligence.raw = sex(orgy);
 			intelligence.mutate();
 		}
