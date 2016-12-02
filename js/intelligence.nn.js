@@ -1,6 +1,5 @@
 import {vector} from "./entities.js";
 import {objects} from "./entities/objects.js";
-import {random, randomNdx} from "./math.js"
 
 var nests = [], generation = 0, clearGame;
 const targetNbrLinks = {min: 30, max: 50}, nbrNests = 100;
@@ -15,12 +14,12 @@ function one2R(n) {
 }
 function randomInputCombo(inputNames) {
 	var rv = [];
-	while(.3>random())
-		rv.push(inputNames[randomNdx(inputNames.length)]);
+	while(.3>Math.random())
+		rv.push(inputNames[Math.floor(Math.random()*inputNames.length)]);
 	return rv.join('*');
 }
 function randomItem(arr) {
-	return arr[randomNdx(arr.length)];
+	return arr[Math.floor(Math.random()*arr.length)];
 }
 export var intelligence = {
 	get raw() {
@@ -36,15 +35,15 @@ export var intelligence = {
 		var i;
 		this.defaults = $.extend(true, {}, this.defaults);
 		this.neurons = $.extend(true, {}, this.neurons);
-		for(i in this.defaults) this.defaults[i] = one2R(random(1, -1));
+		for(i in this.defaults) this.defaults[i] = one2R(2*Math.random()-1);
 		for(i in io.output) {
 			this.neurons[i] = {};
-			while(.7>random())
-				this.neurons[i][randomInputCombo(inputNames)] = one2R(random(1, -1));
+			while(.7>Math.random())
+				this.neurons[i][randomInputCombo(inputNames)] = one2R(2*Math.random()-1);
 		}
 	},
 	mutation() {
-		return random(3, -4);
+		return Math.random()*6-3;
 	},
 	mutationAddOne() {
 		var itm = randomItem(Object.keys(this.neurons)),
@@ -66,7 +65,7 @@ export var intelligence = {
 	},
 	mutationPick(nCnt) {
 		var i, tIndex;
-		tIndex = randomNdx(nCnt.total);
+		tIndex = Math.floor(Math.random()*nCnt.total);
 		for(i in this.neurons) {
 			if(tIndex< nCnt[i].length)
 				return {output: i, input: nCnt[i][tIndex]};
@@ -86,11 +85,11 @@ export var intelligence = {
 	},
 	mutate() {
 		var nCnt = this.neuronCount();
-		while(.5> random())
+		while(.5> Math.random())
 			this.mutationDefaultOne();
-		while(nCnt.total && 1-(targetNbrLinks.min/nCnt.total)> random())
+		while(nCnt.total && 1-(targetNbrLinks.min/nCnt.total)> Math.random())
 			this.mutationChangeOne(nCnt);
-		while(targetNbrLinks.min/nCnt.total> random()) {
+		while(targetNbrLinks.min/nCnt.total> Math.random()) {
 			this.mutationAddOne();
 			++nCnt.total;
 		}
@@ -134,7 +133,7 @@ export var intelligence = {
 		output['velocity'] = base('velocity');
 		output['inertia.direction'] = base('velocity');
 		input['ant.strength'] = ant.strength*2-1;
-		input['random'] = random(1, -1);
+		input['random'] = Math.random()*2-1;
 		//output['action.drop'] = base('action.drop');
 		for(let i = 0; i < 5; ++i)
 			inputPheromon('p'+i);
@@ -205,34 +204,6 @@ export function initIntelligence(clear) {
 	}
 }
 
-const expAdvantage = 1.1;
-function sex(nests) {
-	var i, maxR = 0, pheromonChoices = {}, rv = {
-		neurons: {},
-		defaults: {}
-	};
-	for(i in nests) nests[i].score = Math.pow(expAdvantage, nests[i].score);
-	for(i in nests) maxR += nests[i].score;
-	function mix(type, copy) {
-		var i, j, chx, pDetect;
-		for(i in nests[0][type]) {
-			pDetect = i.split('.');
-			j = 'pheromon'=== pDetect[0]? pheromonChoices[pDetect[1]] : void 0;
-			if(undefined=== j) {
-				chx = random(maxR);
-				for(j=0; 0< (chx -= nests[j].score); ++j);
-				if('pheromon'=== pDetect[0])
-					pheromonChoices[pDetect[1]] = j;
-			}
-			rv[type][i] = copy(nests[j][type][i]);
-		}
-	}
-	mix('neurons', function(x) { return $.extend(true, {}, x); });
-	mix('defaults', function(x) { return x; });
-	for(i in nests) nests[i].score = (Math.log(nests[i].score)/Math.log(expAdvantage))-(nests[i].score/maxR);
-	return rv;
-}
-
 export function endGame(intelligence, score) {
 	//if(score < -10) score = undefined;
 	if(undefined!== score)
@@ -241,38 +212,32 @@ export function endGame(intelligence, score) {
 	if(nbrNests < nests.length || (nbrNests == nests.length && undefined=== score)) {
 		if(undefined!== score)
 			nests.pop();	//removes the "loser"
+		var index = Math.random();
 		if(document.getElementById('checkBest').checked)
-			intelligence.raw = $.extend(true, {}, nests[0]);
-		else {
-			var i, index, nbr = 1/*randomNdx(3, 1)*/, orgy = [];
-			while(orgy.length < nbr) {
-				index = random();
-				index *= index * nests.length;	//[0..1[ square to chose more probably best ones
-				index = Math.floor(index);
-				if(0> orgy.indexOf(nests[index]))
-					orgy.push(nests[index]);
-			}
-			if(1== nbr) {
-				intelligence.raw = $.extend(true, {}, orgy[0]);
-				--orgy[0].score;
-			} else
-				intelligence.raw = sex(orgy);
-			intelligence.mutate();
-		}
-	} else
+			index = 0;
+		else
+			index *= index * nests.length;	//[0..1[ square to chose more probably best ones
+		index = Math.floor(index);
+		intelligence.raw = $.extend(true, {}, nests[index]);
+		nests[index].score -= 1;	//kill the father slowly at each offspring
+		intelligence.mutate();
+	} else {
 		intelligence.random();
+	}
 	var average = 0;
 	for(let i in nests)
 		average += nests[i].score;
 	$('#scoreAverage').text(average / nests.length);
 	$('#scoreMin').text(nests[nests.length-1].score);
 	$('#scoreMax').text(nests[0].score);
+	$('#population').text(nests.length);
 	$('#generation').text(++generation);
 	clearGame();
 }
 
 $("#infos").append(`
 	<div>Generation:<span id="generation"></span></div>
+	<div>population:<span id="population"></span></div>
 	<div>Max:<span id="scoreMax"></span></div>
 	<div>Average:<span id="scoreAverage"></span></div>
 	<div>Min:<span id="scoreMin"></span></div>
