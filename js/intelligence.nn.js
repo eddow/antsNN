@@ -1,5 +1,6 @@
 import {vector} from "./entities.js";
 import {objects} from "./entities/objects.js";
+import {random, randomNdx} from "./math.js"
 
 var nests = [], generation = 0, clearGame;
 const targetNbrLinks = {min: 30, max: 50}, nbrNests = 100;
@@ -14,12 +15,12 @@ function one2R(n) {
 }
 function randomInputCombo(inputNames) {
 	var rv = [];
-	while(.3>Math.random())
-		rv.push(inputNames[Math.floor(Math.random()*inputNames.length)]);
+	while(.3>random())
+		rv.push(inputNames[randomNdx(inputNames.length)]);
 	return rv.join('*');
 }
 function randomItem(arr) {
-	return arr[Math.floor(Math.random()*arr.length)];
+	return arr[randomNdx(arr.length)];
 }
 export var intelligence = {
 	get raw() {
@@ -35,11 +36,11 @@ export var intelligence = {
 		var i;
 		this.defaults = $.extend(true, {}, this.defaults);
 		this.neurons = $.extend(true, {}, this.neurons);
-		for(i in this.defaults) this.defaults[i] = one2R(2*Math.random()-1);
+		for(i in this.defaults) this.defaults[i] = one2R(random(1, -1));
 		for(i in io.output) {
 			this.neurons[i] = {};
-			while(.7>Math.random())
-				this.neurons[i][randomInputCombo(inputNames)] = one2R(2*Math.random()-1);
+			while(.7>random())
+				this.neurons[i][randomInputCombo(inputNames)] = one2R(random(1, -1));
 		}
 	},
 	mutation() {
@@ -65,7 +66,7 @@ export var intelligence = {
 	},
 	mutationPick(nCnt) {
 		var i, tIndex;
-		tIndex = Math.floor(Math.random()*nCnt.total);
+		tIndex = randomNdx(nCnt.total);
 		for(i in this.neurons) {
 			if(tIndex< nCnt[i].length)
 				return {output: i, input: nCnt[i][tIndex]};
@@ -85,11 +86,11 @@ export var intelligence = {
 	},
 	mutate() {
 		var nCnt = this.neuronCount();
-		while(.5> Math.random())
+		while(.5> random())
 			this.mutationDefaultOne();
-		while(nCnt.total && 1-(targetNbrLinks.min/nCnt.total)> Math.random())
+		while(nCnt.total && 1-(targetNbrLinks.min/nCnt.total)> random())
 			this.mutationChangeOne(nCnt);
-		while(targetNbrLinks.min/nCnt.total> Math.random()) {
+		while(targetNbrLinks.min/nCnt.total> random()) {
 			this.mutationAddOne();
 			++nCnt.total;
 		}
@@ -133,7 +134,7 @@ export var intelligence = {
 		output['velocity'] = base('velocity');
 		output['inertia.direction'] = base('velocity');
 		input['ant.strength'] = ant.strength*2-1;
-		input['random'] = Math.random()*2-1;
+		input['random'] = random(1, -1);
 		//output['action.drop'] = base('action.drop');
 		for(let i = 0; i < 5; ++i)
 			inputPheromon('p'+i);
@@ -230,14 +231,12 @@ export function endGame(intelligence, score) {
 	$('#scoreAverage').text(average / nests.length);
 	$('#scoreMin').text(nests[nests.length-1].score);
 	$('#scoreMax').text(nests[0].score);
-	$('#population').text(nests.length);
 	$('#generation').text(++generation);
 	clearGame();
 }
 
 $("#infos").append(`
 	<div>Generation:<span id="generation"></span></div>
-	<div>population:<span id="population"></span></div>
 	<div>Max:<span id="scoreMax"></span></div>
 	<div>Average:<span id="scoreAverage"></span></div>
 	<div>Min:<span id="scoreMin"></span></div>
