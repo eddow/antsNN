@@ -44,7 +44,7 @@ export var intelligence = {
 		}
 	},
 	mutation() {
-		return random(3, -4);
+		return random(3, -3);
 	},
 	mutationAddOne() {
 		var itm = randomItem(Object.keys(this.neurons)),
@@ -205,34 +205,6 @@ export function initIntelligence(clear) {
 	}
 }
 
-const expAdvantage = 1.1;
-function sex(nests) {
-	var i, maxR = 0, pheromonChoices = {}, rv = {
-		neurons: {},
-		defaults: {}
-	};
-	for(i in nests) nests[i].score = Math.pow(expAdvantage, nests[i].score);
-	for(i in nests) maxR += nests[i].score;
-	function mix(type, copy) {
-		var i, j, chx, pDetect;
-		for(i in nests[0][type]) {
-			pDetect = i.split('.');
-			j = 'pheromon'=== pDetect[0]? pheromonChoices[pDetect[1]] : void 0;
-			if(undefined=== j) {
-				chx = random(maxR);
-				for(j=0; 0< (chx -= nests[j].score); ++j);
-				if('pheromon'=== pDetect[0])
-					pheromonChoices[pDetect[1]] = j;
-			}
-			rv[type][i] = copy(nests[j][type][i]);
-		}
-	}
-	mix('neurons', function(x) { return $.extend(true, {}, x); });
-	mix('defaults', function(x) { return x; });
-	for(i in nests) nests[i].score = (Math.log(nests[i].score)/Math.log(expAdvantage))-(nests[i].score/maxR);
-	return rv;
-}
-
 export function endGame(intelligence, score) {
 	//if(score < -10) score = undefined;
 	if(undefined!== score)
@@ -241,26 +213,18 @@ export function endGame(intelligence, score) {
 	if(nbrNests < nests.length || (nbrNests == nests.length && undefined=== score)) {
 		if(undefined!== score)
 			nests.pop();	//removes the "loser"
+		var index = Math.random();
 		if(document.getElementById('checkBest').checked)
-			intelligence.raw = $.extend(true, {}, nests[0]);
-		else {
-			var i, index, nbr = 1/*randomNdx(3, 1)*/, orgy = [];
-			while(orgy.length < nbr) {
-				index = random();
-				index *= index * nests.length;	//[0..1[ square to chose more probably best ones
-				index = Math.floor(index);
-				if(0> orgy.indexOf(nests[index]))
-					orgy.push(nests[index]);
-			}
-			if(1== nbr) {
-				intelligence.raw = $.extend(true, {}, orgy[0]);
-				--orgy[0].score;
-			} else
-				intelligence.raw = sex(orgy);
-			intelligence.mutate();
-		}
-	} else
+			index = 0;
+		else
+			index *= index * nests.length;	//[0..1[ square to chose more probably best ones
+		index = Math.floor(index);
+		intelligence.raw = $.extend(true, {}, nests[index]);
+		nests[index].score -= 1;	//kill the father slowly at each offspring
+		intelligence.mutate();
+	} else {
 		intelligence.random();
+	}
 	var average = 0;
 	for(let i in nests)
 		average += nests[i].score;
