@@ -205,7 +205,6 @@ export function initIntelligence(clear) {
 	}
 }
 
-/*
 const expAdvantage = 1.1;
 function sex(nests) {
 	var i, maxR = 0, pheromonChoices = {}, rv = {
@@ -235,7 +234,6 @@ function sex(nests) {
 }
 
 export function endGame(intelligence, score) {
-	//if(score < -10) score = undefined;
 	if(undefined!== score)
 		nests.push($.extend(true, {score}, intelligence.raw));
 	nests.sort(function(a, b) { return b.score-a.score; });
@@ -262,37 +260,6 @@ export function endGame(intelligence, score) {
 		}
 	} else
 		intelligence.random();
-	var average = 0;
-	for(let i in nests)
-		average += nests[i].score;
-	$('#scoreAverage').text(average / nests.length);
-	$('#scoreMin').text(nests[nests.length-1].score);
-	$('#scoreMax').text(nests[0].score);
-	$('#generation').text(++generation);
-	clearGame();
-}
-*/
-
-export function endGame(intelligence, score) {
-	//if(score < -10) score = undefined;
-	if(undefined!== score)
-		nests.push($.extend(true, {score}, intelligence.raw));
-	nests.sort(function(a, b) { return b.score-a.score; });
-	if(nbrNests < nests.length || (nbrNests == nests.length && undefined=== score)) {
-		if(undefined!== score)
-			nests.pop();	//removes the "loser"
-		var index = Math.random();
-		if(document.getElementById('checkBest').checked)
-			index = 0;
-		else
-			index *= index * nests.length;	//[0..1[ square to chose more probably best ones
-		index = Math.floor(index);
-		intelligence.raw = $.extend(true, {}, nests[index]);
-		nests[index].score -= 1;	//kill the father slowly at each offspring
-		intelligence.mutate();
-	} else {
-		intelligence.random();
-	}
 	var average = 0;
 	for(let i in nests)
 		average += nests[i].score;
