@@ -3,7 +3,7 @@ import {objects} from "./entities/objects.js";
 import {random, randomNdx} from "./math.js"
 
 var nests = [], generation = 0, clearGame;
-const targetNbrLinks = {min: 30, max: 50}, nbrNests = 100;
+const targetNbrLinks = {min: 30, max: 50}, nbrNests = 2;
 
 function R2one(n) {
 	return 2*Math.atan(n)/Math.PI;
@@ -13,14 +13,14 @@ function one2R(n) {
 	else if(n<-1) n = -1;
 	return Math.tan(n*1.5);	//tan(pi/2) : illegal
 }
+function randomItem(arr) {
+	return arr[randomNdx(arr.length)];
+}
 function randomInputCombo(inputNames) {
 	var rv = [];
 	while(.3>random())
-		rv.push(inputNames[randomNdx(inputNames.length)]);
+		rv.push(randomItem(inputNames));
 	return rv.join('*');
-}
-function randomItem(arr) {
-	return arr[randomNdx(arr.length)];
 }
 export var intelligence = {
 	get raw() {
@@ -335,5 +335,4 @@ $('#loadCmd').click(function() {
 	fr = new FileReader();
 	fr.onload = receivedText;
 	fr.readAsText(input.files[0]);
-	//fr.readAsDataURL(input.files[0]);
 });
