@@ -3,7 +3,7 @@ import {objects} from "./entities/objects.js";
 import {random, randomNdx} from "./math.js"
 
 var nests = [], generation = 0, clearGame;
-const targetNbrLinks = {min: 30, max: 50}, nbrNests = 2;
+const targetNbrLinks = {min: 30, max: 50}, nbrNests = 100;
 
 function R2one(n) {
 	return 2*Math.atan(n)/Math.PI;
