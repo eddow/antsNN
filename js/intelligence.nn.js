@@ -3,7 +3,7 @@ import {objects} from "./entities/objects.js";
 import {random, randomNdx} from "./math.js"
 
 var nests = [], generation = 0, clearGame;
-const targetNbrLinks = {min: 30, max: 50}, nbrNests = 100;
+const targetNbrLinks = {min: 30, max: 50}, nbrNests = 2;
 
 function R2one(n) {
 	return 2*Math.atan(n)/Math.PI;
@@ -24,11 +24,10 @@ function randomInputCombo(inputNames) {
 }
 export var intelligence = {
 	get raw() {
-		return {neurons: this.neurons, defaults: this.defaults};
+		return {neurons: this.neurons, defaults: this.defaults, score: this.score};
 	},
 	set raw(v) {
-		this.neurons = v.neurons;
-		this.defaults = v.defaults;
+		Object.assign(this, v);
 	},
 	defaults: {},
 	neurons: {},
@@ -42,6 +41,7 @@ export var intelligence = {
 			while(.7>random())
 				this.neurons[i][randomInputCombo(inputNames)] = one2R(random(1, -1));
 		}
+		this.score = this.scale = 0;
 	},
 	mutation() {
 		return random(3, -3);
@@ -229,13 +229,15 @@ function sex(nests) {
 	}
 	mix('neurons', function(x) { return $.extend(true, {}, x); });
 	mix('defaults', function(x) { return x; });
-	for(i in nests) nests[i].score = (Math.log(nests[i].score)/Math.log(expAdvantage))-(nests[i].score/maxR);
+	rv.score = 0;
+	for(i in nests) rv.score += (nests[i].score = (Math.log(nests[i].score)/Math.log(expAdvantage))-(nests[i].score/maxR));
+	rv.score /= nests.length;
 	return rv;
 }
 
 export function endGame(intelligence, score) {
 	if(undefined!== score)
-		nests.push($.extend(true, {score}, intelligence.raw));
+		nests.push($.extend(true, {}, intelligence.raw, {score}));
 	nests.sort(function(a, b) { return b.score-a.score; });
 	if(nbrNests < nests.length || (nbrNests == nests.length && undefined=== score)) {
 		if(undefined!== score)
@@ -256,6 +258,8 @@ export function endGame(intelligence, score) {
 				--orgy[0].score;
 			} else
 				intelligence.raw = sex(orgy);
+			
+			intelligence.scale = R2one(intelligence.score/20);
 			intelligence.mutate();
 		}
 	} else
@@ -268,6 +272,7 @@ export function endGame(intelligence, score) {
 	$('#scoreMax').text(nests[0].score);
 	$('#generation').text(++generation);
 	clearGame();
+	return intelligence;
 }
 
 $("#infos").append(`

@@ -8,7 +8,7 @@ import {intelligence, initIntelligence, endGame} from "./intelligence.nn.js";
 
 const gameLength = 2000, startAnts = 10, maxAnts = 100;
 var lava = new objects('background', 0), grass = new objects('background', 100),
-	queen = new nest(300, [board.middle, board.middle], 10),
+	queen = new nest(300, [board.middle, board.middle], 20),
 	{pheromons} = initIntelligence(clearGame),
 	counter = 0;
 intelligence.random();
@@ -133,8 +133,11 @@ function conditions() {
 		score = ants+queen.resource;
 	else if(ants >= maxAnts)
 		score = maxAnts*gameLength/counter;
-	if(false!== score)
-		endGame(intelligence, score);
+	if(false!== score) {
+		var intel = endGame(intelligence, score);
+		queen.radius = 20 - 10*intel.scale;
+		queen.redraw();
+	}
 	plan(antAdvance);
 }
 
